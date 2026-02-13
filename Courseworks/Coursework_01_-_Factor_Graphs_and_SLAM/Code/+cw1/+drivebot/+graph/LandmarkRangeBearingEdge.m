@@ -59,9 +59,17 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             %   platform pose and observation.
 
             warning('LandmarkRangeBearingEdge.initialEstimate: implement')
-
+            
             lx = obj.edgeVertices{1}.x(1:2);
-            obj.edgeVertices{2}.setEstimate(lx);
+            theta = obj.edgeVertices{1}.x(3);
+            z = obj.z;
+            phi = theta + z(2);
+
+            mXY = zeros(2, 1);
+            mXY(1) = lx(1) + z(1) * cos(phi);
+            mXY(2) = lx(2) + z(1) * sin(phi);
+
+            obj.edgeVertices{2}.setEstimate(mXY);
         end
         
         function computeError(obj)
@@ -75,8 +83,14 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             %   between the predicted and actual range-bearing measurement.
 
             warning('LandmarkRangeBearingEdge.computeError: implement')
-           
             obj.errorZ = zeros(2, 1);
+            
+            x = obj.edgeVertices{1}.estimate();
+            landmark = obj.edgeVertices{2}.estimate();
+            dx = landmark(1:2) - x(1:2);
+            
+            obj.errorZ(1) = norm(dx) - obj.z(1);
+            obj.errorZ(2) = g2o.stuff.normalize_theta(atan2(dx(2), dx(1)) - x(3) - obj.z(2));
         end
         
         function linearizeOplus(obj)
@@ -93,8 +107,22 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             warning('LandmarkRangeBearingEdge.linearizeOplus: implement')
 
             obj.J{1} = eye(2, 3);
-            
             obj.J{2} = eye(2);
+
+            landmark = obj.edgeVertices{2}.estimate();
+            x = obj.edgeVertices{1}.estimate();
+            dx = landmark(1:2) - x(1:2);
+            r = norm(dx);
+
+            if r < 1e-9
+                r = 1e-9;
+            end 
+            
+            obj.J{1} = ...
+                [-dx(1)/r -dx(2)/r 0;
+                dx(2)/r^2 -dx(1)/r^2 -1];
+            obj.J{2} = [dx(1)/r dx(2)/r;
+                       -dx(2)/r^2 dx(1)/r^2];
         end        
     end
 end
