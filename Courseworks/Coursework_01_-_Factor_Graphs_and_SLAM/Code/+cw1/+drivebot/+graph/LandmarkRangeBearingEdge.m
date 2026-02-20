@@ -58,18 +58,18 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             %   Compute the initial estimate of the landmark given the
             %   platform pose and observation.
 
-            warning('LandmarkRangeBearingEdge.initialEstimate: implement')
+            %warning('LandmarkRangeBearingEdge.initialEstimate: implement')
             
-            lx = obj.edgeVertices{1}.x(1:2);
+            xk = obj.edgeVertices{1}.x(1:2);
             theta = obj.edgeVertices{1}.x(3);
             z = obj.z;
             phi = theta + z(2);
 
-            mXY = zeros(2, 1);
-            mXY(1) = lx(1) + z(1) * cos(phi);
-            mXY(2) = lx(2) + z(1) * sin(phi);
+            M = zeros(2, 1);
+            M(1) = xk(1) + z(1) * cos(phi);
+            M(2) = xk(2) + z(1) * sin(phi);
 
-            obj.edgeVertices{2}.setEstimate(mXY);
+            obj.edgeVertices{2}.setEstimate(M);
         end
         
         function computeError(obj)
@@ -82,15 +82,18 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             %   Compute the value of the error, which is the difference
             %   between the predicted and actual range-bearing measurement.
 
-            warning('LandmarkRangeBearingEdge.computeError: implement')
+            %warning('LandmarkRangeBearingEdge.computeError: implement')
             obj.errorZ = zeros(2, 1);
             
             x = obj.edgeVertices{1}.estimate();
             landmark = obj.edgeVertices{2}.estimate();
             dx = landmark(1:2) - x(1:2);
+            r = norm(dx);
+            r_pred = r;
+            b_pred = atan2(dx(2), dx(1)) - x(3);
             
-            obj.errorZ(1) = norm(dx) - obj.z(1);
-            obj.errorZ(2) = g2o.stuff.normalize_theta(atan2(dx(2), dx(1)) - x(3) - obj.z(2));
+            obj.errorZ(1) = obj.z(1) - r_pred;
+            obj.errorZ(2) = g2o.stuff.normalize_theta(obj.z(2) - b_pred);
         end
         
         function linearizeOplus(obj)
@@ -104,7 +107,7 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             %   the vertex.
             %
 
-            warning('LandmarkRangeBearingEdge.linearizeOplus: implement')
+            %warning('LandmarkRangeBearingEdge.linearizeOplus: implement')
 
             obj.J{1} = eye(2, 3);
             obj.J{2} = eye(2);
@@ -114,15 +117,11 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             dx = landmark(1:2) - x(1:2);
             r = norm(dx);
 
-            if r < 1e-9
-                r = 1e-9;
-            end 
-            
             obj.J{1} = ...
-                [-dx(1)/r -dx(2)/r 0;
-                dx(2)/r^2 -dx(1)/r^2 -1];
-            obj.J{2} = [dx(1)/r dx(2)/r;
-                       -dx(2)/r^2 dx(1)/r^2];
+                [dx(1)/r -dx(2)/r 0;
+                -dx(2)/r^2 dx(1)/r^2 1];
+            obj.J{2} = [-dx(1)/r -dx(2)/r;
+                         dx(2)/r^2 -dx(1)/r^2];
         end        
     end
 end

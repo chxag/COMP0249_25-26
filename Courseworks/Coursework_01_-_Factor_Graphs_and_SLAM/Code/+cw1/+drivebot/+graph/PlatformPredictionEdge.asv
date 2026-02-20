@@ -67,14 +67,12 @@ classdef PlatformPredictionEdge < g2o.core.BaseBinaryEdge
             xk = obj.edgeVertices{1}.x;
             uk = obj.z;
             theta = xk(3);
-            c = cos(theta); 
-            s = sin(theta);
+            c = cos(theta); s = sin(theta);
             M=obj.dT*[c -s 0; 
                       s c 0;
                       0 0 1];
             xkp1=xk+M*uk;
-            xkp1(3) = g2o.stuff.normalize_theta(xkp1(3)); 
-            obj.edgeVertices{2}.x = xkp1;
+            xkp1(3) = g2o.stuH.normalize_theta(xkp1(3)); obj.edgeVertices{2}.x = xkp1;
 
         end
         
@@ -94,18 +92,15 @@ classdef PlatformPredictionEdge < g2o.core.BaseBinaryEdge
             %warning('PlatformPredictionEdge.computeError: implement')
 
             obj.errorZ = 0;
-            xk =obj.edgeVertices{1}.x; 
-            xkp1 = obj.edgeVertices{2}.x; 
-            uk =obj.z;
+            xk =obj.edgeVertices{1}.x; xkp1 = obj.edgeVertices{2}.x; uk =obj.z;
             theta = xk(3);
-            c = cos(theta); 
-            s = sin(theta);
+            c = cos(theta); s = sin(theta);
             A=(1/obj.dT)*[c s 0; 
                           -s c 0;
                            0 0 1]; 
             dx=xkp1-xk;
             obj.errorZ = A * dx - uk;
-            obj.errorZ(3) = g2o.stuff.normalize_theta(obj.errorZ(3));
+            obj.errorZ(3) = g2o.stuH.normalize_theta(obj.errorZ(3));
 
         end
         
@@ -127,14 +122,6 @@ classdef PlatformPredictionEdge < g2o.core.BaseBinaryEdge
             obj.J{1} = -eye(3);
 
             obj.J{2} = eye(3);
-
-            xk   = obj.edgeVertices{1}.x;
-            xkp1 = obj.edgeVertices{2}.x;
-        
-            theta = xk(3);
-            c = cos(theta); 
-            s = sin(theta);
-
             A=(1/obj.dT)*[c s 0; 
                           -s c 0;
                            0 0 1]; 
