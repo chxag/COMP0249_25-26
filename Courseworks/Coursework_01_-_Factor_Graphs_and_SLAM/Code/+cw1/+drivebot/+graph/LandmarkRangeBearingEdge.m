@@ -65,11 +65,11 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             z = obj.z;
             phi = theta + z(2);
 
-            M = zeros(2, 1);
-            M(1) = xk(1) + z(1) * cos(phi);
-            M(2) = xk(2) + z(1) * sin(phi);
+            m = zeros(2, 1);
+            m(1) = xk(1) + z(1) * cos(phi);
+            m(2) = xk(2) + z(1) * sin(phi);
 
-            obj.edgeVertices{2}.setEstimate(M);
+            obj.edgeVertices{2}.setEstimate(m);
         end
         
         function computeError(obj)
