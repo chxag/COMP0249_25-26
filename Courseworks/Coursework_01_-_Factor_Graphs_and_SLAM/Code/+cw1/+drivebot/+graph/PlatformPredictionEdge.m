@@ -62,18 +62,25 @@ classdef PlatformPredictionEdge < g2o.core.BaseBinaryEdge
 
             %warning('PlatformPredictionEdge.initialEstimate: implement')
 
-            % Compute the posterior assming no noise
-            obj.edgeVertices{2}.x = zeros(3, 1);
+            % Current state x_k and control input u_{k+1}
             xk = obj.edgeVertices{1}.x;
             uk = obj.z;
+
             theta = xk(3);
-            c = cos(theta); 
+            c = cos(theta);
             s = sin(theta);
-            M=obj.dT*[c -s 0; 
-                      s c 0;
-                      0 0 1];
-            xkp1=xk+M*uk;
-            xkp1(3) = g2o.stuff.normalize_theta(xkp1(3)); 
+
+            % M(psi_k)
+            M = obj.dT * [ c  -s   0;
+                           s   c   0;
+                           0   0   1 ];
+
+            % Predict x_{k+1} assuming zero process noise
+            xkp1 = xk + M * uk;
+
+            % Wrap heading to [-pi, pi]
+            xkp1(3) = g2o.stuff.normalize_theta(xkp1(3));
+
             obj.edgeVertices{2}.x = xkp1;
 
         end
@@ -93,18 +100,30 @@ classdef PlatformPredictionEdge < g2o.core.BaseBinaryEdge
                        
             %warning('PlatformPredictionEdge.computeError: implement')
 
-            obj.errorZ = 0;
-            xk =obj.edgeVertices{1}.x; 
-            xkp1 = obj.edgeVertices{2}.x; 
-            uk =obj.z;
+
+            xk   = obj.edgeVertices{1}.x;
+            xkp1 = obj.edgeVertices{2}.x;
+            uk   = obj.z;
+
             theta = xk(3);
-            c = cos(theta); 
+            c = cos(theta);
             s = sin(theta);
-            A=(1/obj.dT)*[c s 0; 
-                          -s c 0;
-                           0 0 1]; 
-            dx=xkp1-xk;
+
+            if obj.dT <= 0
+                error('PlatformPredictionEdge: dT must be > 0');
+            end
+
+            % inv(M) = (1/dT) * [R^T 0; 0 1]
+            A = (1/obj.dT) * [ c   s   0;
+                              -s   c   0;
+                               0   0   1 ];
+
+            dx = xkp1 - xk;
+
+            % Error: inv(M) * (x_{k+1} - x_k) - u_{k+1}
             obj.errorZ = A * dx - uk;
+
+            % Wrap heading error
             obj.errorZ(3) = g2o.stuff.normalize_theta(obj.errorZ(3));
 
         end
@@ -123,29 +142,38 @@ classdef PlatformPredictionEdge < g2o.core.BaseBinaryEdge
             %
 
             %warning('PlatformPredictionEdge.linearizeOplus: implement')
-
-            obj.J{1} = -eye(3);
-
-            obj.J{2} = eye(3);
-
             xk   = obj.edgeVertices{1}.x;
             xkp1 = obj.edgeVertices{2}.x;
-        
+
             theta = xk(3);
-            c = cos(theta); 
+            c = cos(theta);
             s = sin(theta);
 
-            A=(1/obj.dT)*[c s 0; 
-                          -s c 0;
-                           0 0 1]; 
-            dx=xkp1-xk;
-            dA_dtheta=(1/obj.dT)*[-s c 0; 
-                                  -c -s 0;
-                                   0 0 0];
-            J1=-A;
+            if obj.dT <= 0
+                error('PlatformPredictionEdge: dT must be > 0');
+            end
+
+            % A = inv(M(psi_k))
+            A = (1/obj.dT) * [ c   s   0;
+                              -s   c   0;
+                               0   0   1 ];
+
+            dx = xkp1 - xk;
+
+            % dA/dtheta
+            dA_dtheta = (1/obj.dT) * [ -s   c   0;
+                                      -c  -s   0;
+                                       0   0   0 ];
+
+            % Jacobian wrt x_k
+            J1 = -A;
             J1(:,3) = J1(:,3) + dA_dtheta * dx;
-            J2=A;
-            obj.J{1} = J1; obj.J{2} = J2;
+
+            % Jacobian wrt x_{k+1}
+            J2 = A;
+
+            obj.J{1} = J1;
+            obj.J{2} = J2;
 
         end
     end    
