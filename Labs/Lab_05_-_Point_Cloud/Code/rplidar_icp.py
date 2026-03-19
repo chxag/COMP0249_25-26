@@ -38,7 +38,7 @@ os_name = platform.system()
 if os_name == 'Windows':
     PORT_NAME = 'COM8'                # Windows default
 elif os_name == 'Darwin':             # macOS
-    PORT_NAME = '/dev/tty.SLAB_USBtoUART' # Common driver name for RPLIDAR on Mac
+    PORT_NAME = '/dev/tty.usbserial-1420' # Common driver name for RPLIDAR on Mac
 else:                                 # Linux / Ubuntu
     PORT_NAME = '/dev/ttyUSB0'        # Linux default
 
@@ -78,7 +78,7 @@ def solve_point_to_plane(src, dst, dst_normals):
         d = dst[i]
         n = dst_normals[i]
         # Activity 2: Calculate cross term
-        cross_term = 1000 # Modify this line, see the formulation in the lab instruction 
+        cross_term = s[0]*n[1] - s[1]*n[0] # Modify this line, see the formulation in the lab instruction 
         # End of Activity 2
         A.append([cross_term, n[0], n[1]])
         b.append(np.dot(d - s, n))

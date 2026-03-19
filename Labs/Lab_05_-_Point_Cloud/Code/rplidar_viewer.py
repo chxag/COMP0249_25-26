@@ -12,7 +12,7 @@ os_name = platform.system()
 if os_name == 'Windows':
     port_name = 'COM7'                # Windows default
 elif os_name == 'Darwin':             # macOS
-    port_name = '/dev/tty.SLAB_USBtoUART' # Common driver name for RPLIDAR on Mac
+    port_name = '/dev/tty.usbserial-1420' # Common driver name for RPLIDAR on Mac
 else:                                 # Linux / Ubuntu
     port_name = '/dev/ttyUSB0'        # Linux default
 

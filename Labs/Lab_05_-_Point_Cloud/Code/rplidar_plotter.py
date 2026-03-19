@@ -20,7 +20,7 @@ os_name = platform.system()
 if os_name == 'Windows':
     PORT_NAME = 'COM7'                # Windows default
 elif os_name == 'Darwin':             # macOS
-    PORT_NAME = '/dev/tty.SLAB_USBtoUART' # Common driver name for RPLIDAR on Mac
+    PORT_NAME = '/dev/tty.usbserial-1420' # Common driver name for RPLIDAR on Mac
 else:                                 # Linux / Ubuntu
     PORT_NAME = '/dev/ttyUSB0'        # Linux default
 
@@ -58,8 +58,8 @@ def main():
 
 
                     # Activity 1: Converting Range/Bearing Measurements
-                    x_polar_to_cart = 10 # Modify this line
-                    y_polar_to_cart = 10 # Modify this line                    
+                    x_polar_to_cart = distance * math.cos(rad) # Modify this line
+                    y_polar_to_cart = distance * math.sin(rad) # Modify this line                    
                     # End of Activity 1
 
                     x = cx + (x_polar_to_cart * SCALE_RATIO)
