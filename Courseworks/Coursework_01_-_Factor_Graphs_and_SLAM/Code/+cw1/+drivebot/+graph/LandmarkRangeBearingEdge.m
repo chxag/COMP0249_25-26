@@ -58,10 +58,18 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             %   Compute the initial estimate of the landmark given the
             %   platform pose and observation.
 
-            warning('LandmarkRangeBearingEdge.initialEstimate: implement')
+            %warning('LandmarkRangeBearingEdge.initialEstimate: implement')
+            
+            xk = obj.edgeVertices{1}.x(1:2);
+            theta = obj.edgeVertices{1}.x(3);
+            z = obj.z;
+            phi = theta + z(2);
 
-            lx = obj.edgeVertices{1}.x(1:2);
-            obj.edgeVertices{2}.setEstimate(lx);
+            m = zeros(2, 1);
+            m(1) = xk(1) + z(1) * cos(phi);
+            m(2) = xk(2) + z(1) * sin(phi);
+
+            obj.edgeVertices{2}.setEstimate(m);
         end
         
         function computeError(obj)
@@ -74,9 +82,18 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             %   Compute the value of the error, which is the difference
             %   between the predicted and actual range-bearing measurement.
 
-            warning('LandmarkRangeBearingEdge.computeError: implement')
-           
+            %warning('LandmarkRangeBearingEdge.computeError: implement')
             obj.errorZ = zeros(2, 1);
+            
+            x = obj.edgeVertices{1}.estimate();
+            landmark = obj.edgeVertices{2}.estimate();
+            dx = landmark(1:2) - x(1:2);
+            r = norm(dx);
+            r_pred = r;
+            b_pred = atan2(dx(2), dx(1)) - x(3);
+            
+            obj.errorZ(1) = obj.z(1) - r_pred;
+            obj.errorZ(2) = g2o.stuff.normalize_theta(obj.z(2) - b_pred);
         end
         
         function linearizeOplus(obj)
@@ -90,11 +107,21 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             %   the vertex.
             %
 
-            warning('LandmarkRangeBearingEdge.linearizeOplus: implement')
+            %warning('LandmarkRangeBearingEdge.linearizeOplus: implement')
 
             obj.J{1} = eye(2, 3);
-            
             obj.J{2} = eye(2);
+
+            landmark = obj.edgeVertices{2}.estimate();
+            x = obj.edgeVertices{1}.estimate();
+            dx = landmark(1:2) - x(1:2);
+            r = norm(dx);
+
+            obj.J{1} = ...
+                [dx(1)/r -dx(2)/r 0;
+                -dx(2)/r^2 dx(1)/r^2 1];
+            obj.J{2} = [-dx(1)/r -dx(2)/r;
+                         dx(2)/r^2 -dx(1)/r^2];
         end        
     end
 end
