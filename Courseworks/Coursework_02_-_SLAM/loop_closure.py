@@ -20,7 +20,7 @@ import icp
 from pose_se2 import PoseSE2
 
 class LoopClosureDetector:
-    def __init__(self, search_radius=4.25, icp_error_thresh=0.15, temporal_skip=50):
+    def __init__(self, search_radius=10, icp_error_thresh=0.1, temporal_skip=50):
         """
         Initializes the Loop Closure Detector.
         
@@ -93,16 +93,9 @@ class LoopClosureDetector:
                 )
                 loop_found = True
                 
-                # Optional: Artificial delay for visualization synchronization (e.g., ROS bag or PyGame execution)
+                
                 time.sleep(0.05)
                 
         return loop_found
     
-    '''
-    Report:
-    
-    Detection Trigger Logic:
-
-    The robot constantly receives new laser scans as it navigates. For each new scan, the loop closure detector is invoked with the current pose and scan index. The first step is temporal filtering, where we ignore any historical poses that are too recent (within the last 50 frames) to avoid trivial matches with immediately preceding scans.
-    Next, we extract the 2D positions of all historical poses up to the temporal skip and build a KD-tree for efficient spatial querying. We query this tree to find any historical poses that fall within a 4.25-meter radius of the current estimated position. This spatial proximity trigger significantly reduces the number of candidate scans we need to evaluate, focusing only on those that are physically nearby.
-    '''
+   
