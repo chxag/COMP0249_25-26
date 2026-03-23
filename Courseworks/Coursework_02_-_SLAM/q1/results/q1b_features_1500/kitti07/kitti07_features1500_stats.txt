@@ -1,0 +1,43 @@
+--------------------------------------------------------------------------------
+Loaded 1101 stamps and poses from: /home/sam20031020/slam_q1/results/baseline/kitti07/kitti07_gt_tum.txt
+Loaded 522 stamps and poses from: /home/sam20031020/slam_q1/results/q1b_features_1500/kitti07/KeyFrameTrajectory.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories...
+Found 522 of max. 522 possible matching timestamps between...
+	/home/sam20031020/slam_q1/results/baseline/kitti07/kitti07_gt_tum.txt
+and:	/home/sam20031020/slam_q1/results/q1b_features_1500/kitti07/KeyFrameTrajectory.txt
+..with max. time diff.: 0.01 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method... (with scale correction)
+Rotation of alignment:
+[[ 0.99213294 -0.01095299  0.12470873]
+ [ 0.01156476  0.99992438 -0.00418268]
+ [-0.12465348  0.005592    0.99218458]]
+Translation of alignment:
+[-43.20363161   1.25419154  13.91949112]
+Scale correction: 7.00547078248823
+--------------------------------------------------------------------------------
+Compared 522 absolute pose pairs.
+Calculating APE for translation part pose relation...
+--------------------------------------------------------------------------------
+APE w.r.t. translation part (m)
+(with Sim(3) Umeyama alignment)
+
+       max	45.407918
+      mean	14.673417
+    median	13.441825
+       min	0.552829
+      rmse	17.957558
+       sse	168331.378188
+       std	10.352040
+
+--------------------------------------------------------------------------------
+Plotting results... 
+Plots saved to kitti07_features1500_ape.pdf
+--------------------------------------------------------------------------------
+Saving results to kitti07_features1500_ape.zip...
+eval_wall_s	32.65
+matched_poses	522
+matched_first_ts	0.000000
+matched_last_ts	113.705700
+matched_duration_s	113.705700

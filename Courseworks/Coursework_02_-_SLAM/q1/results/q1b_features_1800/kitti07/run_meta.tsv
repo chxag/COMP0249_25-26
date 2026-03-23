@@ -1,0 +1,4 @@
+feature	kitti07
+run_exit	0
+vocab_load_s	4.606567
+new_map_s	5.361601

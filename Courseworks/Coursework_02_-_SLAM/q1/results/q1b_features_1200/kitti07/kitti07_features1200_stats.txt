@@ -1,0 +1,43 @@
+--------------------------------------------------------------------------------
+Loaded 1101 stamps and poses from: /home/sam20031020/slam_q1/results/baseline/kitti07/kitti07_gt_tum.txt
+Loaded 403 stamps and poses from: /home/sam20031020/slam_q1/results/q1b_features_1200/kitti07/KeyFrameTrajectory.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories...
+Found 403 of max. 403 possible matching timestamps between...
+	/home/sam20031020/slam_q1/results/baseline/kitti07/kitti07_gt_tum.txt
+and:	/home/sam20031020/slam_q1/results/q1b_features_1200/kitti07/KeyFrameTrajectory.txt
+..with max. time diff.: 0.01 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method... (with scale correction)
+Rotation of alignment:
+[[ 0.01386228  0.02245914 -0.99965165]
+ [-0.0024357   0.99974551  0.02242747]
+ [ 0.99990095  0.00212396  0.01391346]]
+Translation of alignment:
+[-68.95325899   0.95229155  19.71708586]
+Scale correction: 8.07773941529414
+--------------------------------------------------------------------------------
+Compared 403 absolute pose pairs.
+Calculating APE for translation part pose relation...
+--------------------------------------------------------------------------------
+APE w.r.t. translation part (m)
+(with Sim(3) Umeyama alignment)
+
+       max	27.417304
+      mean	10.252325
+    median	8.540558
+       min	3.330864
+      rmse	11.846082
+       sse	56552.848396
+       std	5.934601
+
+--------------------------------------------------------------------------------
+Plotting results... 
+Plots saved to kitti07_features1200_ape.pdf
+--------------------------------------------------------------------------------
+Saving results to kitti07_features1200_ape.zip...
+eval_wall_s	22.37
+matched_poses	403
+matched_first_ts	9.874249
+matched_last_ts	86.992950
+matched_duration_s	77.118701

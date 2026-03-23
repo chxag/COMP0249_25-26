@@ -1,0 +1,14 @@
+APE w.r.t. translation part (m)
+(with Sim(3) Umeyama alignment)
+
+       max	0.137229
+      mean	0.044367
+    median	0.031297
+       min	0.003237
+      rmse	0.053363
+       sse	0.518256
+       std	0.029650
+
+Plots saved to /home/sam20031020/slam_q1/results/q1b_features_1500/tum_f3_long_office_household/tum_f3_long_office_household_features1500_ape.pdf
+
+[exit_code] 0

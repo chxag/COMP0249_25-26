@@ -1,0 +1,43 @@
+--------------------------------------------------------------------------------
+Loaded 8710 stamps and poses from: /home/sam20031020/slam_q1/data/rgbd_dataset_freiburg3_long_office_household/groundtruth.txt
+Loaded 196 stamps and poses from: /home/sam20031020/slam_q1/results/q1b_tum_f3long_1200/KeyFrameTrajectory.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories...
+Found 195 of max. 196 possible matching timestamps between...
+	/home/sam20031020/slam_q1/data/rgbd_dataset_freiburg3_long_office_household/groundtruth.txt
+and:	/home/sam20031020/slam_q1/results/q1b_tum_f3long_1200/KeyFrameTrajectory.txt
+..with max. time diff.: 0.01 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method... (with scale correction)
+Rotation of alignment:
+[[-0.99986778 -0.01525778 -0.00562402]
+ [-0.00266726  0.49505171 -0.86885942]
+ [ 0.01604105 -0.86872954 -0.49502694]]
+Translation of alignment:
+[-0.73999264  2.63387147  1.72908877]
+Scale correction: 2.4358266504780373
+--------------------------------------------------------------------------------
+Compared 195 absolute pose pairs.
+Calculating APE for translation part pose relation...
+--------------------------------------------------------------------------------
+APE w.r.t. translation part (m)
+(with Sim(3) Umeyama alignment)
+
+       max	0.130173
+      mean	0.039467
+    median	0.028313
+       min	0.002916
+      rmse	0.047957
+       sse	0.448470
+       std	0.027244
+
+--------------------------------------------------------------------------------
+Plotting results... 
+Plots saved to tum_f3long_1200_ape.pdf
+--------------------------------------------------------------------------------
+Saving results to tum_f3long_1200_ape.zip...
+eval_wall_s	25.59
+matched_poses	195
+traj_first_ts	1341847980.722988
+traj_last_ts	1341848067.726732
+traj_duration_s	87.003744

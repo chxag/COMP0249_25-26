@@ -1,0 +1,40 @@
+--------------------------------------------------------------------------------
+Loaded 1101 stamps and poses from: /home/sam20031020/slam_q1/results/baseline/kitti07/kitti07_gt_tum.txt
+Loaded 494 stamps and poses from: /home/sam20031020/slam_q1/results/baseline/kitti07/orbslam2_kitti07_keyframes_tum.txt
+--------------------------------------------------------------------------------
+Synchronizing trajectories...
+Found 494 of max. 494 possible matching timestamps between...
+	/home/sam20031020/slam_q1/results/baseline/kitti07/kitti07_gt_tum.txt
+and:	/home/sam20031020/slam_q1/results/baseline/kitti07/orbslam2_kitti07_keyframes_tum.txt
+..with max. time diff.: 0.01 (s) and time offset: 0.0 (s).
+--------------------------------------------------------------------------------
+Aligning using Umeyama's method... (with scale correction)
+Rotation of alignment:
+[[ 0.99921215  0.00160881  0.03965466]
+ [-0.001427    0.99998834 -0.00461279]
+ [-0.03966162  0.00455257  0.9992028 ]]
+Translation of alignment:
+[-0.75392867  0.12735094 -2.8319513 ]
+Scale correction: 10.991658320827948
+--------------------------------------------------------------------------------
+Compared 494 absolute pose pairs.
+Calculating APE for translation part pose relation...
+--------------------------------------------------------------------------------
+APE w.r.t. translation part (m)
+(with Sim(3) Umeyama alignment)
+
+       max	5.634407
+      mean	2.647825
+    median	2.432294
+       min	0.876853
+      rmse	2.839454
+       sse	3982.875348
+       std	1.025439
+
+--------------------------------------------------------------------------------
+Plotting results... 
+Plots saved to kitti07_ape_rerun.pdf
+--------------------------------------------------------------------------------
+Saving results to kitti07_ape_rerun.zip...
+eval_wall_s	27.15
+matched_poses	494
